@@ -3,10 +3,11 @@ import {Routes,Route,Link} from "react-router-dom"
 import Pizza from './Pizza'
 import Homepage from './Homepage'
 
-//STATE
+
 
 
 const App = () => {
+  
   return (
     <>
       <h1 className="home-page">Home</h1>
