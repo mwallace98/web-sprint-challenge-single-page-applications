@@ -48,8 +48,8 @@ export default function OrderForm() {
     
     
     const change = (evt => {
-       const {name,specialInstructions,value} = evt.target;
-       setFormValues({...formValues, [name]: value, [specialInstructions]: value})
+       const {name,specialInstructions,size,value} = evt.target;
+       setFormValues({...formValues, [name]: value, [specialInstructions]: value, [size]: value})
        
     })
     
@@ -71,11 +71,11 @@ export default function OrderForm() {
             </label>
                 <h4>Choose size</h4>
             <label> 
-                <select id='size-dropdown'>
+                <select onChange={change} id='size-dropdown'>
                 <option name='size'>Select a Size </option>
                 <option name='small'>Small</option>
-                <option value='medium'>Medium</option>
-                <option value='large'>Large</option>
+                <option name='medium'>Medium</option>
+                <option name='large'>Large</option>
                 </select>
             </label>
             <div className='toppings-checkbox'>
@@ -114,7 +114,9 @@ export default function OrderForm() {
                     onChange={change}
                 />
                 </label >
+                <div>
                 <input type='submit' value='Add to Order'/>
+                </div>
             </div>
             </form>
         </div>
