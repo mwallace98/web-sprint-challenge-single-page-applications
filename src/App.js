@@ -10,6 +10,7 @@ const App = () => {
   
   return (
     <>
+   
       <h1 className="home-page">Home</h1>
       <div className="links">
         <Link to='/' >Home</Link>
