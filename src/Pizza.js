@@ -12,6 +12,7 @@ const schema = yup.object().shape({
 })
 
 
+
 const initialValues = {
     name:'',
     size: '',
@@ -22,14 +23,10 @@ const initialValues = {
     specialInstructions: '',
 
 }
-const initialFormErrors = {
-    name:'',
-}
+const initialFormErrors = ''
+ 
 
-//STATE, 
-// need to create state to hold the initial values and then some way to update them
-// create a slice of state that holds the values in the form oncee they are updated
-// on submit needs to upadte the new values into a slice of state
+
 export default function OrderForm() {
 
 
@@ -37,28 +34,50 @@ export default function OrderForm() {
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     
 
-    // const submit = (evt) => {     
-    //     }
-    //     evt.preventDefault()
-    //     axios.post('https://reqres.in/api/orders',newPizza)
-    //     .then(res => {
-    //         console.log(res)
-    //     })
-    //     .catch(err => console.log(err))
+
+
+    const submitForm = (evt) => {
+        evt.preventDefault();
+        const newPizza = {
+            name: formValues.name,
+            size: formValues.size,
+            pepperoni:formValues.pepperoni,
+            mushrooms:formValues.mushrooms,
+            beef:formValues.beef,
+            chicken:formValues.chicken,
+            specialInstructions:formValues.specialInstructions
+        }
+        axios.post('https://reqres.in/api/orders',newPizza)
+        .then(res =>{
+            console.log(res);
+        })
+        .catch(err => console.log(err))
+    }
+
     
     
     const change = (evt => {
        const {name,specialInstructions,size,value} = evt.target;
-       setFormValues({...formValues, [name]: value, [specialInstructions]: value, [size]: value})
-       
+       let result = evt.target.type === 'checkbox' ? evt.target.checked : value
+       setFormValues({...formValues, [name]: value })
+       schema.validate(formValues)
+       .then(res => {
+        setFormErrors(initialFormErrors)
+       })
+       .catch(err => {
+        console.log(err)
+        setFormErrors("name must be at least 2 characters")
+       })
+       //checkbox values need to be true or false
+       //determine how to differenciate checkbox from other inputs
+       //update the toppings with the correct value
+       //updates to on, needs to update to true or false
     })
     
-
-
     return (
         <div>
             <h1> Order Form</h1> 
-            <form  id='pizza-form'>
+            <form  id='pizza-form' onSubmit={submitForm}>
             <label>
                 <h4>Name</h4>
                 <input 
@@ -68,40 +87,45 @@ export default function OrderForm() {
                     placeholder='Enter your Name'
                     onChange={change}
                 />
+                <div>{formErrors}</div>
             </label>
                 <h4>Choose size</h4>
             <label> 
-                <select onChange={change} id='size-dropdown'>
-                <option name='size'>Select a Size </option>
-                <option name='small'>Small</option>
-                <option name='medium'>Medium</option>
-                <option name='large'>Large</option>
+                <select onChange={change} id='size-dropdown' name='size'>
+                <option value=''>Select a Size </option>
+                <option value='small'>Small</option>
+                <option value='medium'>Medium</option>
+                <option value='large'>Large</option>
                 </select>
             </label>
-            <div className='toppings-checkbox'>
+            <div className='toppings-checkbox' id='toppings-input'>
                 <h4>Toppings</h4>
                 <label>Pepperoni
                     <input 
                     type='checkbox'
                     name='pepperoni'
+                    onChange={change}
                     />
                 </label>
                 <label>Mushrooms
                     <input 
                     type='checkbox'
                     name='Mushrooms'
+                    onChange={change}
                     />
                 </label>
                 <label>Beef
                     <input 
                     type='checkbox'
                     name='Beef'
+                    onChange={change}
                     />
                 </label>
                 <label>Chicken
                     <input 
                     type='checkbox'
                     name='Chicken'
+                    onChange={change}
                     />
                 </label>
                 <label>
@@ -115,7 +139,7 @@ export default function OrderForm() {
                 />
                 </label >
                 <div>
-                <input type='submit' value='Add to Order'/>
+                <button type='submit' value='submit-button' id='order-button'> Submit Order</button>
                 </div>
             </div>
             </form>
